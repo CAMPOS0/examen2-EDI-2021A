@@ -1,68 +1,122 @@
 #include <stdio.h>
+#include <string.h>
 
-#define N 25
+#define N 2
 
-#define Usuarios 2
+#define Estatu 0
+#define Sueldo 1
 
-void leerDatos(int C[N], char nom[Usuarios][N],float ES[N][2]);
-int masAlto(float estatura[N][2],int *col);
+void leerDatos(int C[N], char nom[N][20],float ES[N][2]);
+int masAlto(float estatura[N][2]);
+void ordenar(int c[N], char n[N][20], float ES[N][2]);
+void imprimir(int c[N],char n[N][20],float es[N][2]);
 
 
 int main()
 {
     int clave [N];
-    char nombre[Usuarios][N];
+    char nombre[N][20];
     float EstaturaSueldo [N][2];
-    int pos,col;
+    int pos;
 
 
     leerDatos( clave, nombre, EstaturaSueldo);
+    ordenar(clave, nombre, EstaturaSueldo);
+    imprimir(clave, nombre,EstaturaSueldo);
     
-    pos = masAlto(EstaturaSueldo, &col);
+    pos = masAlto(EstaturaSueldo);
+
+    printf("Empleado mas alto: %s\n", nombre[pos]);
+    printf("Estatura de: %f\n",EstaturaSueldo[pos][Estatu]);
     
     return 0;
 }
-
-void leerDatos(int C[N], char nom[Usuarios][N],float ES[N][2])
+void imprimir(int c[N],char n[N][20],float es[N][2])
 {
-    int i,j;
+    int i;
+
+    printf("Clave     Nombre     Estatura    Sueldo\n");
+
+    for ( i = 0; i < N; i++)
+    {
+        printf("%d\t\t", c[i]);
+        printf("%s\t", n[i]);
+        printf("%f\t",es[i][Estatu]);
+        printf("%f\n", es[i][Sueldo]);
+    }
     
-    for ( i = 0; i < Usuarios; i++)
+}
+
+void ordenar(int c[N], char n[N][20], float ES[N][2])
+{
+    int i, j;
+    float aux;
+    int auxClave;
+    char auxN[20];
+
+    for ( i = 0; i < N; i++)
+    {
+        for ( j = 0; j < N -1; j++)
+        {
+            if (ES[j][Sueldo]< ES[j+1][Sueldo])
+            {
+                aux = ES[j][Sueldo];
+                ES[j][Sueldo]=ES[j+1][Sueldo];
+                ES[j+1][Sueldo]=aux;
+
+                aux = ES[j][Estatu];
+                ES[j][Estatu]=ES[j+1][Estatu];
+                ES[j+1][Estatu]=aux;
+
+                auxClave= c[j];
+                c[j]=c[j+1];
+                c[j+1]=auxClave;
+
+                strcpy(auxN, n[j]);
+                strcpy(n[j],n[j+1]);
+                strcpy(n[j+1],auxN);
+            }
+            
+        }
+        
+    }
+    
+}
+
+void leerDatos(int C[N], char nom[N][20],float ES[N][2])
+{
+    int i;
+    
+    for ( i = 0; i < N; i++)
     {
         printf("Dame clave %d: ",i);
         scanf("%d", &C[i]);
         printf("Dame nombre: ");
         scanf("%s", nom[i]);
-
-        for (j = 0;j < 1; j++)
-        {
-            printf("Dame estatura : ");
-            scanf("%f", &ES[i][0]);
-            printf("Dame sueldo: ");
-            scanf("%f", &ES[i][1]);
-        }
+        printf("Dame estatura : ");
+        scanf("%f", &ES[i][0]);
+        printf("Dame sueldo: ");
+         scanf("%f", &ES[i][1]);
+        
     }   
 }
 
-
-int masAlto(float estatura[N][2],int *col)
+int masAlto(float estatura[N][2])
 {
-    int pos ;
-    int j,i;
+    int pos= 0 ;
+    int i;
     float ma = estatura [0][0];
-
-
-    for ( j= 0; j < Usuarios; j++)
+    
+    
+    for (i = 0; i < N ; i++)
     {
-        for (i = 0; i < 1 ; i++)
+        if (estatura[i][0]>ma)
         {
-            if (estatura[j][i] > ma)
-            {
-                ma = estatura[j][i];
-                *col = i;
-               pos = i;
-            } 
-        }
+            ma = estatura[1][0];
+            pos = i;
+        } 
     }
+    
  return pos; 
 }
+ //     <3
